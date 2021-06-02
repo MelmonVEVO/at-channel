@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS boards (
+    uri  VARCHAR(7) NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    new_thread_number INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS posts (
+    thread INTEGER NOT NULL,
+    thread_pos INTEGER NOT NULL DEFAULT 0,
+    board VARCHAR(7) NOT NULL,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    bump_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    op VARCHAR(50) NOT NULL,
+    email VARCHAR (50),
+    title VARCHAR(50),
+    body TEXT NOT NULL,
+
+    PRIMARY KEY (thread, thread_pos, board),
+    FOREIGN KEY (board) REFERENCES boards(uri)
+);
