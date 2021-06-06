@@ -17,7 +17,6 @@ def get_db():
 
 def close_db(e=None):
     db = g.pop('db', None)
-
     if db is not None:
         db.close()
 
@@ -29,10 +28,36 @@ def init_db():
         db.executescript(f.read().decode('utf8'))
 
 
+@click.command('init-db')
+@with_appcontext
+def init_db_command():
+    """clear the existing data and create new tables"""
+    init_db()
+    click.echo('Initialised the database.')
+
+
+def init_app(app):
+    app.teardown_appcontext(close_db)
+    app.cli.add_command(init_db_command)
+    app.cli.add_command(add_board)
+    app.cli.add_command(get_boards)
+
+
 @click.command('add_board')
 @click.argument('uri')
 @click.argument('name')
 @with_appcontext
 def add_board(uri, name):
-    get_db().execute('INSERT INTO boards VALUES (?, ?)', [uri, name])
+    db = get_db()
+    db.execute('INSERT INTO boards (uri, name) VALUES (?, ?)', [uri, name])
+    db.commit()
     click.echo('Added board /' + uri + "/ - " + name)
+
+
+@click.command('get_boards')
+@with_appcontext
+def get_boards():
+    boards = get_db().execute('SELECT uri, name FROM boards').fetchall()
+    click.echo('All boards: ')
+    for b in boards:
+        click.echo('/' + b[0] + '/ - ' + b[1])

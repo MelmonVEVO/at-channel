@@ -1,12 +1,18 @@
 import os
-import db
-from flask import Flask, g
+from . import db, board, thread
+from flask import Flask, render_template, current_app
+
+
+def four_oh_four(e):
+    return render_template('404.html'), 404
 
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
-    app['SECRET_KEY'] = "nya"
-    app['DATABASE'] = os.path.join(app.instance_path, 'atch.sqlite')
+    app.config.from_mapping(
+        SECRET_KEY="nya",
+        DATABASE=os.path.join(app.instance_path, "atch.sqlite")
+    )
 
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)
@@ -18,9 +24,12 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    db.init_db()
+    db.init_app(app)
+    app.register_blueprint(board.bp)
+    app.register_blueprint(thread.bp)
+    app.register_error_handler(404, four_oh_four)
 
-    g.boards = db.get_db().execute('SELECT uri FROM boards').fetchall()
+    return app
 
 
 def get_boards():

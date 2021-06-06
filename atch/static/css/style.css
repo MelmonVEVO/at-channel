@@ -1,0 +1,21 @@
+html {
+    font-family: sans-serif;
+    background-color: lightcyan;
+}
+
+.title {
+    color: darkred;
+    font-weight: bold;
+}
+
+.user {
+    color: darkgreen;
+}
+
+.header {
+    background-color: aquamarine;
+}
+
+.body {
+    background-color: lightskyblue;
+}

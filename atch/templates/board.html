@@ -1,10 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block scripts %}
+{% endblock %}
+
+{% block header %}
+    <h1>{% block title %}/{{ uri }}/ - {{ name }}{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    Start a New Thread:
+    <form id="new_post" action="{{ url_for('board.new_thread', uri=uri) }}" name="new_thread" method="post" enctype="multipart/form-data">
+        <label for="title">Title</label>
+        <input name="title" id="title">
+        <label for="name">Name</label>
+        <input name="name" id="name" placeholder="Anonymous">
+        <label for="email">Options</label>
+        <input name="email" id="email" >
+        <label for="body">Body</label>
+        <textarea name="body" id="body" required></textarea>
+        <input type="submit" value="Post">
+    </form>
+    {% for thread in threads %}
+        <div class="thread" id="t{{ thread["threads.thread_id"] }}">
+            &gt;&gt;
+            <div class="thread header">
+                <span class="thread_no">{{ thread["thread_id"] }}</span>
+                <span class="title">{{ thread["title"] }}</span>
+                <span class="user">
+                    {% if thread["email"] == "" %}
+                        {{ thread["name"] }}
+                    {% else %}
+                        <a href="mailto:{{ thread["email"] }}">{{ thread["name"] }}</a>
+                    {% endif %}
+                </span>
+                <span class="date">{{ thread["created"].strftime('%d/%m/%Y') }}</span>
+
+            </div>
+            <div class="thread body">
+                {{ thread["body"] }}
+            </div>
+            <span>
+                [<a href="{{ url_for("thread.view_thread", uri=uri, thread=thread["thread_id"]) }}">View Thread</a>]
+            </span>
+        </div>
+    {% endfor %}
+{% endblock %}
