@@ -25,17 +25,9 @@ def browse_board(uri):
 @bp.route('/<string:uri>/new_thread', methods=['POST'])
 def new_thread(uri):
     if request.method == 'POST':
-        if request.form['name']:
-            name = request.form['name']
-            if '◆' in name:  # tripcode separator not allowed (to improve)
-                return render_template("post_error.html", why="The diamond symbol (◆) is not allowed in usernames.")
-            if '#' in name:  # process tripcode
-                go = name.index('#')
-                trip = sha1(name[go:].encode('utf-8'))
-                name = name[:go]
-                name = name + "◆" + trip.hexdigest()[:10]
-        else:
-            name = "Anonymous"
+        if '◆' in request.form['name']:
+            return render_template('post_error.html', why="The diamond symbol (◆) is not allowed in usernames.")
+        name = process_name(request.form['name'])
         email = request.form['email']
         title = request.form['title']
         if request.form['body']:
@@ -64,3 +56,13 @@ def get_all_boards():
     for x in boards:
         board_ids += x[0]
     return board_ids
+
+
+def process_name(name):
+    if name:
+        if '#' in name:  # process tripcode
+            go = name.index('#')
+            trip = sha1(name[go:].encode('utf-8'))
+            name = name[:go]
+            return name + "◆" + trip.hexdigest()[:10]
+    return "Anonymous"

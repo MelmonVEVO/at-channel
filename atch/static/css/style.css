@@ -12,10 +12,31 @@ html {
     color: darkgreen;
 }
 
-.header {
-    background-color: aquamarine;
+.arrows {
+    float: left;
+    margin-right: 7px;
+    margin-left: 2px;
 }
 
-.body {
+.post_container {
+    display: table;
+    border: 1px solid cadetblue;
+    margin-bottom: 7px;
+}
+
+.post {
+    padding: 4px;
+}
+
+.post.header {
+    background-color: aquamarine;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+.post.body {
     background-color: lightskyblue;
+    padding-left: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }

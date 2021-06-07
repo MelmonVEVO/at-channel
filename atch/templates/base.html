@@ -5,14 +5,12 @@
     <title>{% block title %}{% endblock %} - @channel</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}">
-    <script type=text/javascript src="{{ url_for('static', filename='js/jquery-3.6.0.js') }}"></script>
     {% block scripts %}{% endblock %}
 </head>
 <body>
 <nav id="boards"></nav>
 <section class="content">
     <header>
-        <p class="board_list">Boards: [{% for b in board_list %}<a href="{{ url_for("board.browse_board", uri=b) }}">{{ b }}</a>{% endfor %}]</p>
         {% block header %}{% endblock %}
     </header>
     {% for message in get_flashed_messages() %}

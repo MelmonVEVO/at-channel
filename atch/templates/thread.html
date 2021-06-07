@@ -4,40 +4,53 @@
 {% endblock %}
 
 {% block header %}
+    <p class="board_list">Boards: [{% for b in board_list %}<a href="{{ url_for("board.browse_board", uri=b) }}">{{ b }}</a>{% endfor %}]</p>
     <h1>{% block title %}/{{ uri }}/ - {{ thread_data["thread_id"] }}{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-    <form id="new_post" action="{{ url_for('thread.new_reply', uri=uri, thread=thread_data["thread_id"]) }}" name="new_post" method="post" enctype="multipart/form-data">
-    <label for="name">Name</label>
-    <input name="name" id="name" value="{{ request.form['name'] }}" placeholder="Anonymous">
-    <label for="email">Options</label>
-    <input name="email" id="email" value="{{ request.form['email'] }}">
-    <label for="body">Body</label>
-    <textarea name="body" id="body" required></textarea>
-    <input type="submit" value="Post">
+    <form action="{{ url_for('thread.new_reply', uri=uri, thread=thread_data["thread_id"]) }}" name="new_post" method="post" enctype="multipart/form-data">
+        <table id="new_post">
+            <tr datatype="name">
+                <td><label for="name">Name</label></td>
+                <td><input name="name" id="name" value="{{ request.form['name'] }}" placeholder="Anonymous" tabindex="1"></td>
+            </tr>
+            <tr datatype="email">
+                <td><label for="email">Options</label></td>
+                <td><input name="email" id="email" value="{{ request.form['email'] }}" tabindex="2"></td>
+                <td><input type="submit" value="Post" tabindex="4"></td>
+            </tr>
+            <tr datatype="body">
+                <td><label for="body">Body</label></td>
+                <td><textarea name="body" id="body" required tabindex="3" wrap="soft" cols="48" rows="4"></textarea></td>
+            </tr>
+        </table>
     </form>
 
     <div class="thread_header">
-        <span class="thread_no">{{ thread_data["thread_id"] }}</span>
+        <span class="thread_no">Thread No: {{ thread_data["thread_id"] }}</span>
         &nbsp;||&nbsp;
         <span class="title">{{ thread_data["title"] }}</span>
     </div>
 
     {% for reply in replies %}
-        &gt;&gt;{{ reply["reply_id"] }}
-        <div class="reply header">
-            <span class="user">
-                    {% if reply["email"] == "" %}
-                        {{ reply["name"] }}
-                    {% else %}
-                        <a href="mailto:{{ reply["email"] }}">{{ reply["name"] }}</a>
-                    {% endif %}
-                </span>
-            <span class="date">{{ reply["created"] }}</span>
+        <div class="arrows">
+            &gt;&gt;{{ reply["reply_id"] }}
         </div>
-        <div class="reply body">
-            {{ reply["body"] }}
+        <div class="post_container">
+                <div class="post header">
+                    <span class="user">
+                        {% if reply["email"] == "" %}
+                            {{ reply["name"] }}
+                        {% else %}
+                            <a href="mailto:{{ reply["email"] }}">{{ reply["name"] }}</a>
+                        {% endif %}
+                    </span>
+                    <span class="date">{{ reply["created"] }}</span>
+                </div>
+                <div class="post body">
+                {{ reply["body"] }}
+                </div>
         </div>
     {% endfor %}
 {% endblock %}
