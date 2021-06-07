@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block header %}
-    <p class="board_list">Boards: [{% for b in board_list %}<a href="{{ url_for("board.browse_board", uri=b) }}">{{ b }}</a>{% endfor %}]</p>
+    <p class="board_list">Boards: [ {% for b in board_list %}<a href="{{ url_for("board.browse_board", uri=b) }}">{{ b }}</a> {% endfor %}]</p>
     <h1>{% block title %}/{{ uri }}/ - {{ thread_data["thread_id"] }}{% endblock %}</h1>
 {% endblock %}
 
