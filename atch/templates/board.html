@@ -22,8 +22,10 @@
             </tr>
             <tr datatype="email">
                 <td><label for="email">Options</label></td>
-                <td><input name="email" id="email" value="{{ request.form['email'] }}" tabindex="3"></td>
-                <td><input type="submit" value="Post" tabindex="5"></td>
+                <td>
+                    <input name="email" id="email" value="{{ request.form['email'] }}" tabindex="3">
+                    <input type="submit" value="Post" tabindex="5" style="margin-left: 3px;">
+                </td>
             </tr>
             <tr datatype="body">
                 <td><label for="body">Body</label></td>
@@ -49,7 +51,10 @@
                 </span>
             </div>
             <div class="post body">
-                {{ thread["body"] }}
+                {% set text = thread["body"].split('\n') %}
+                    {% for line in text %}
+                        {{ line }}<br>
+                    {% endfor %}
             </div>
         </div>
     {% endfor %}

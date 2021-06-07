@@ -1,6 +1,5 @@
 from flask import Blueprint, flash, g, redirect, render_template, request, session, url_for, abort
 from atch.db import get_db
-from hashlib import sha1
 from atch.board import get_all_boards, process_name
 
 bp = Blueprint('thread', __name__)

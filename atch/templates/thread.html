@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block content %}
+    Reply to this thread:
     <form action="{{ url_for('thread.new_reply', uri=uri, thread=thread_data["thread_id"]) }}" name="new_post" method="post" enctype="multipart/form-data">
         <table id="new_post">
             <tr datatype="name">
@@ -17,8 +18,10 @@
             </tr>
             <tr datatype="email">
                 <td><label for="email">Options</label></td>
-                <td><input name="email" id="email" value="{{ request.form['email'] }}" tabindex="2"></td>
-                <td><input type="submit" value="Post" tabindex="4"></td>
+                <td>
+                    <input name="email" id="email" value="{{ request.form['email'] }}" tabindex="2">
+                    <input type="submit" value="Post" tabindex="4" style="margin-left: 3px;">
+                </td>
             </tr>
             <tr datatype="body">
                 <td><label for="body">Body</label></td>
@@ -26,6 +29,8 @@
             </tr>
         </table>
     </form>
+
+    <br>
 
     <div class="thread_header">
         <span class="thread_no">Thread No: {{ thread_data["thread_id"] }}</span>
@@ -49,7 +54,10 @@
                     <span class="date">{{ reply["created"] }}</span>
                 </div>
                 <div class="post body">
-                {{ reply["body"] }}
+                    {% set text = reply["body"].split('\n') %}
+                    {% for line in text %}
+                        {{ line }}<br>
+                    {% endfor %}
                 </div>
         </div>
     {% endfor %}
