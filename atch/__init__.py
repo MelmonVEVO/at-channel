@@ -1,5 +1,5 @@
 import os
-from . import db, board, thread
+from . import db, board, thread, index
 from flask import Flask, render_template, current_app
 
 
@@ -27,6 +27,7 @@ def create_app(test_config=None):
     db.init_app(app)
     app.register_blueprint(board.bp)
     app.register_blueprint(thread.bp)
+    app.register_blueprint(index.bp)
     app.register_error_handler(404, four_oh_four)
 
     return app

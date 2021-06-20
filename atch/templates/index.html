@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1>{% block title %}Welcome to @channel{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    @channel is a simple message board, letting you create and reply to threads about all sorts of different things, with markdown support coming soon. Feel free to browse the boards below.
+    <div id="board_list">
+        {% for b in boards %}
+            <p class="board_link"><a href="{{ url_for("board.browse_board", uri=b["uri"]) }}">/{{ b["uri"] }}/ - {{ b["name"] }}</a></p>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
