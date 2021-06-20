@@ -1,8 +1,5 @@
 {% extends "base.html" %}
 
-{% block scripts %}
-{% endblock %}
-
 {% block header %}
     <p class="board_list">Boards: [ {% for b in board_list %}<a href="{{ url_for("board.browse_board", uri=b) }}">{{ b }}</a> {% endfor %}]</p>
     <h1>{% block title %}/{{ uri }}/ - {{ name }}{% endblock %}</h1>
@@ -58,4 +55,7 @@
             </div>
         </div>
     {% endfor %}
+{% endblock %}
+
+{% block scripts %}
 {% endblock %}

@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
+
 {% block scripts %}
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        window.THREAD_NUMBER = {{ thread_data["thread_id"] }}
+    </script>
+    <script src="{{ url_for('static', filename='js/threadMain.js') }}"></script>
 {% endblock %}
 
 {% block header %}
@@ -40,10 +46,10 @@
 
     {% for reply in replies %}
         <div class="arrows">
-            &gt;&gt;{{ reply["reply_id"] }}
+            &gt;&gt;<a href="#{{ reply["reply_id"] }}">{{ reply["reply_id"] }}</a>
         </div>
         <div class="post_container">
-                <div class="post header">
+                <div class="post header" id="{{ reply["reply_id"] }}">
                     <span class="user">
                         {% if reply["email"] == "" %}
                             {{ reply["name"] }}
@@ -52,6 +58,7 @@
                         {% endif %}
                     </span>
                     <span class="date">{{ reply["created"] }}</span>
+                    <span class="reply_bt"><a href="#" onclick="return addReplyTag({{ reply["reply_id"] }})">Reply</a></span>
                 </div>
                 <div class="post body">
                     {% set text = reply["body"].split('\n') %}
@@ -61,4 +68,8 @@
                 </div>
         </div>
     {% endfor %}
+    <span>
+        [<a href="#" onclick="refreshPosts()">Refresh</a>]
+        [<a href="{{ url_for("board.browse_board", uri=uri) }}">Go Back</a>]
+    </span>
 {% endblock %}
