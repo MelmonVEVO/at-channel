@@ -10,6 +10,11 @@ html {
 
 .user {
     color: darkgreen;
+    font-weight: bold;
+}
+
+.tripcode {
+    color: darkgreen;
 }
 
 .arrows {
@@ -39,4 +44,28 @@ html {
     padding-left: 15px;
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.tag {
+    font-size: 7pt;
+    padding: 3px;
+    display: inline;
+    font-weight: bolder;
+    vertical-align: middle;
+    color: white;
+    text-transform: uppercase;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.tag.archived {
+    background-color: royalblue;
+}
+
+.tag.banned {
+    background-color: darkred;
+}
+
+.tag.sticky {
+    background-color: rebeccapurple;
 }

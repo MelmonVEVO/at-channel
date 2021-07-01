@@ -15,6 +15,7 @@
 {% endblock %}
 
 {% block content %}
+    {% if thread_data["archived"] == 0 %}
     Reply to this thread:
     <form action="{{ url_for('thread.new_reply', uri=uri, thread=thread_data["thread_id"]) }}" name="new_post" method="post" enctype="multipart/form-data">
         <table id="new_post">
@@ -35,6 +36,9 @@
             </tr>
         </table>
     </form>
+    {% else %}
+        <h1 style="color: navy;">This thread is archived; you may no longer reply.</h1>
+    {% endif %}
 
     <br>
 
@@ -50,6 +54,15 @@
         </div>
         <div class="post_container">
                 <div class="post header" id="{{ reply["reply_id"] }}">
+                    {% if thread_data["sticky"] == 1 %}
+                        <div class="tag sticky">STICKY</div>
+                    {% endif %}
+                    {% if thread_data["archived"] == 1 %}
+                        <div class="tag archived">ARCH</div>
+                    {% endif %}
+                    {% if reply["banned"] == 1 %}
+                        <div class="tag banned">BAN</div>
+                    {% endif %}
                     <span class="user">
                         {% if reply["email"] == "" %}
                             {{ reply["name"] }}
@@ -57,6 +70,9 @@
                             <a href="mailto:{{ reply["email"] }}">{{ reply["name"] }}</a>
                         {% endif %}
                     </span>
+                    {% if reply["tripcode"] is not none %}
+                        <span class="tripcode"> ◆ {{ reply["tripcode"] }}</span>
+                    {% endif %}
                     <span class="date">{{ reply["created"] }}</span>
                     <span class="reply_bt"><a href="#" onclick="return addReplyTag({{ reply["reply_id"] }})">Reply</a></span>
                 </div>

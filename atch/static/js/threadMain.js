@@ -8,10 +8,9 @@ function parsePostBodies() {
 
 
 function addReplyTag(tag) {
-    let text = $('textarea#body')
-    text.append(">>" + tag)
-    text.focus()
-    console.log("eeee")
+    let text = $('textarea#body');
+    text.append(">>" + tag + "\n");
+    text.focus();
 }
 
 

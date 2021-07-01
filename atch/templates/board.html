@@ -33,6 +33,12 @@
     {% for thread in threads %}
         <div class="post_container" id="t{{ thread["threads.thread_id"] }}">
             <div class="post header">
+                {% if thread["sticky"] == 1 %}
+                    <div class="tag sticky">STICKY</div>
+                {% endif %}
+                {% if thread["archived"] == 1 %}
+                    <div class="tag archived">ARCH</div>
+                {% endif %}
                 <span class="thread_no">Thread No: {{ thread["thread_id"] }} ||</span>
                 <span class="title">{{ thread["title"] }}</span>
                 <span class="user">
@@ -42,6 +48,9 @@
                         <a href="mailto:{{ thread["email"] }}">{{ thread["name"] }}</a>
                     {% endif %}
                 </span>
+                {% if thread["tripcode"] is not none %}
+                    <span class="tripcode"> ◆ {{ thread["tripcode"] }}</span>
+                {% endif %}
                 <span class="date">{{ thread["created"] }}</span>
                 <span>
                     [<a href="{{ url_for("thread.view_thread", uri=uri, thread=thread["thread_id"]) }}">View</a>]

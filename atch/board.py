@@ -12,10 +12,10 @@ def browse_board(uri):
     if board_name is None:
         abort(404)
     threads = db.execute(
-        'SELECT threads.thread_id, threads.board, threads.bump_timestamp, threads.title, '
-        'posts.created, posts.name, posts.email, posts.body  '
+        'SELECT threads.thread_id, threads.board, threads.bump_timestamp, threads.title, threads.archived, '
+        'threads.sticky, posts.created, posts.name, posts.email, posts.body, posts.tripcode '
         'FROM threads JOIN posts ON posts.thread=threads.thread_id WHERE threads.board=? and posts.reply_id=0 '
-        'ORDER BY bump_timestamp DESC',
+        'ORDER BY sticky DESC, bump_timestamp DESC',
         (uri,)
     ).fetchall()
 
@@ -25,9 +25,7 @@ def browse_board(uri):
 @bp.route('/<string:uri>/new_thread', methods=['POST'])
 def new_thread(uri):
     if request.method == 'POST':
-        if '◆' in request.form['name']:
-            return render_template('post_error.html', why="The diamond symbol (◆) is not allowed in usernames.")
-        name = process_name(request.form['name'])
+        name, tripcode = process_name(request.form['name'])
         email = request.form['email']
         title = request.form['title']
         if request.form['body']:
@@ -42,8 +40,8 @@ def new_thread(uri):
             (thread_number, uri, title)
         )
         db.execute(
-            'INSERT INTO posts (thread, reply_id, name, email, body, board) VALUES (?, 0, ?, ?, ?, ?)',
-            (thread_number, name, email, body, uri)
+            'INSERT INTO posts (thread, reply_id, name, email, body, board, tripcode) VALUES (?, 0, ?, ?, ?, ?, ?)',
+            (thread_number, name, email, body, uri, tripcode)
         )
         db.commit()
         return redirect(url_for("thread.view_thread", uri=uri, thread=thread_number))  # view specific post
@@ -64,5 +62,8 @@ def process_name(name):
             go = name.index('#')
             trip = sha1(name[go:].encode('utf-8'))
             name = name[:go]
-            return name + "◆" + trip.hexdigest()[:10]
-    return "Anonymous"
+            return name, trip.hexdigest()[:10]
+        else:
+            return name, None
+    else:
+        return "Anonymous", None
